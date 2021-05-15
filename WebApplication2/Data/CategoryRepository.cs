@@ -15,9 +15,29 @@ namespace WebApplication2.Data
             _context = context;
         }
 
+        public Category AddCategory(Category category)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteCategory(Category category)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Category EditCategory(Category category)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Category> GetAll()
         {
             return _context.Categories.ToList();
+        }
+
+        public Category GetCategory(Guid id)
+        {
+            throw new NotImplementedException();
         }
 
         public Category Insert(Category category)

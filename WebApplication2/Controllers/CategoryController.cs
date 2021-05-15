@@ -15,6 +15,8 @@ namespace WebApplication2.Controllers
             _repo = repo;
         }
 
+        [HttpGet]
+        //[Route("api/[controller]")]
         public CategoryListRepresentation GetAll()
         {
             var dbCategories = _repo.GetAll();
