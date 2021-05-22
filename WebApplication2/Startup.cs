@@ -30,7 +30,7 @@ namespace WebApplication2
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             string connectionString = Configuration.GetConnectionString("ShopContextInternship");
             services.AddDbContext<ShopContext>(options => options.UseSqlServer(connectionString));
@@ -56,12 +56,14 @@ namespace WebApplication2
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(action => action.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
             });
         }
     }

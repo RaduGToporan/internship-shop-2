@@ -8,8 +8,7 @@ namespace WebApplication2.Business
     {
         List<Category> GetAll();
         Category Insert(Category category);
-        Category GetCategory(Guid id);
-        Category AddCategory(Category category);
+        Category GetCategory(int id);
         void DeleteCategory(Category category);
         Category EditCategory(Category category);
     }
