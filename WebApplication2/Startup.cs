@@ -35,6 +35,7 @@ namespace WebApplication2
             string connectionString = Configuration.GetConnectionString("ShopContextInternship");
             services.AddDbContext<ShopContext>(options => options.UseSqlServer(connectionString));
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
 
             services.AddSwaggerGen(c =>
             {
