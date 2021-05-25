@@ -15,9 +15,48 @@ namespace WebApplication2.Data
             _context = context;
         }
 
+        /*private List<Category> categories = new List<Category>()
+        {
+            new Category()
+            {
+                CategoryID=44,
+                Name="Adidas",
+                Description="Description1"
+            },
+            new Category()
+            {
+                CategoryID=45,
+                Name="Puma",
+                Description="Description2"
+            }
+        };*/
+
+        public void DeleteCategory(Category category)
+        {
+            _context.Remove(category);
+            _context.SaveChanges();
+        }
+
+        public Category EditCategory(Category category)
+        {
+            var existingCategory = GetCategory(category.CategoryID);
+            existingCategory.Name = category.Name;
+            existingCategory.Products = category.Products;
+            existingCategory.Description = category.Description;
+            _context.Update(existingCategory);
+            _context.SaveChanges();
+            return existingCategory;
+        }
+
         public List<Category> GetAll()
         {
             return _context.Categories.ToList();
+            //return categories;
+        }
+
+        public Category GetCategory(int id)
+        {
+            return _context.Categories.SingleOrDefault(x => x.CategoryID == id);
         }
 
         public Category Insert(Category category)
