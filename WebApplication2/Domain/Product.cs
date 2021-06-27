@@ -10,9 +10,9 @@ namespace WebApplication2.Domain
         public virtual int ProductID { get; set; }
         public virtual string Name { get; set; }
         public virtual string Description { get; set; }
-        public virtual decimal Price { get; set; }
-        public virtual decimal BasePrice { get; set; }
+        public virtual double Price { get; set; }
+        public virtual double BasePrice { get; set; }
         public virtual int CategoryID { get; set; }
-        public virtual string FileName { get; set; }
+        public virtual string ImageName { get; set; }
     }
 }

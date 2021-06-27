@@ -11,7 +11,7 @@ namespace WebApplication2.Models
     {
         public ProductListRepresentation(List<Product> products)
         {
-            this.Products = products.Select(x => new ProductRepresentation(x.ProductID, x.Name)).ToList();
+            this.Products = products.Select(x => new ProductRepresentation(x)).ToList();
         }
 
         [JsonProperty(PropertyName = "products")]

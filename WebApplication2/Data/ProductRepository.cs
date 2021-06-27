@@ -45,7 +45,7 @@ namespace WebApplication2.Data
             existingProduct.BasePrice = product.BasePrice;
             existingProduct.Description = product.Description;
             existingProduct.ProductID = product.ProductID;
-            existingProduct.FileName = product.FileName;
+            existingProduct.ImageName = product.ImageName;
             _context.Update(existingProduct);
             _context.SaveChanges();
             return existingProduct;
