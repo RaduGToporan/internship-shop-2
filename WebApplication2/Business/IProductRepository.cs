@@ -13,6 +13,5 @@ namespace WebApplication2.Business
         Product GetProduct(int id);
         void DeleteProduct(Product product);
         Product EditProduct(Product product);
-
     }
 }

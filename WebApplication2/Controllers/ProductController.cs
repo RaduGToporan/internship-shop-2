@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication2.Business;
@@ -14,23 +16,26 @@ namespace WebApplication2.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductRepository _repo;
-        public ProductController(IProductRepository repo)
+        private readonly IProductRepository _context;
+        public static IWebHostEnvironment _webHostEnvironment;
+
+        public ProductController(IProductRepository repo, IWebHostEnvironment webHostEnvironment)
         {
-            _repo = repo;
+            _context = repo;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
         public ProductListRepresentation GetAll()
         {
-            var dbProducts = _repo.GetAll();
+            var dbProducts = _context.GetAll();
             return new ProductListRepresentation(dbProducts);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetProduct(int id)
         {
-            var product = _repo.GetProduct(id);
+            var product = _context.GetProduct(id);
             if (product != null)
             {
                 return Ok(product);
@@ -41,17 +46,17 @@ namespace WebApplication2.Controllers
         [HttpPost("Create")]
         public IActionResult CreateProduct(Product product)
         {
-            _repo.Insert(product);
+            _context.Insert(product);
             return Ok(product);
         }
 
         [HttpDelete("Delete/{id}")]
         public IActionResult DeleteProduct(int id)
         {
-            var product = _repo.GetProduct(id);
+            var product = _context.GetProduct(id);
             if (product != null)
             {
-                _repo.DeleteProduct(product);
+                _context.DeleteProduct(product);
                 return Ok();
             }
             return NotFound($"Product with Id: {id} was not found");
@@ -60,13 +65,53 @@ namespace WebApplication2.Controllers
         [HttpPatch("{id}")]
         public IActionResult EditProduct(int id, Product product)
         {
-            var existingProduct = _repo.GetProduct(id);
+            var existingProduct = _context.GetProduct(id);
             if (existingProduct != null)
             {
                 product.ProductID = existingProduct.ProductID;
-                _repo.EditProduct(product);
+                _context.EditProduct(product);
             }
             return Ok(product);
         }
+
+        [HttpPost("{id}/image")]
+        public async Task<ActionResult<string>> SaveImage([FromRoute] int id, [FromForm] IFormFile imageFile)
+        {
+
+            var product = _context.GetProduct(id);
+            if (product == null)
+                return NotFound($"Product with Id = {id} not found");
+
+            product.ImageName = imageFile.FileName;
+            _context.EditProduct(product);
+
+            try
+            {
+                if (imageFile.Length > 0)
+                {
+                    string path = _webHostEnvironment.WebRootPath + "\\uploads\\";
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+                    using (var filestream = System.IO.File.Create(path + imageFile.FileName))
+                    {
+                        imageFile.CopyTo(filestream);
+                        filestream.Flush();
+                        return "Uploaded";
+                    }
+                }
+                else
+                {
+                    return "Not Uploaded";
+                }
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
     }
 }

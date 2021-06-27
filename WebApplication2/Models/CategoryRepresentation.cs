@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using WebApplication2.Domain;
 
 namespace WebApplication2.Models
@@ -13,6 +14,8 @@ namespace WebApplication2.Models
         {
             CategoryID = category.CategoryID;
             Name = category.Name;
+            this.Description = category.Description;
+            this.Products = category.Products;
         }
 
         public CategoryRepresentation(int categoryID, string name)
@@ -26,5 +29,7 @@ namespace WebApplication2.Models
 
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
+        public string Description { get; }
+        public ICollection<Product> Products { get; }
     }
 }
