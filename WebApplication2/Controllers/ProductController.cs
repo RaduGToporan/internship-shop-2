@@ -50,7 +50,7 @@ namespace WebApplication2.Controllers
             return Ok(product);
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult DeleteProduct(int id)
         {
             var product = _context.GetProduct(id);
@@ -62,7 +62,7 @@ namespace WebApplication2.Controllers
             return NotFound($"Product with Id: {id} was not found");
         }
 
-        [HttpPatch("{id}")]
+        [HttpPut("{id}")]
         public IActionResult EditProduct(int id, Product product)
         {
             var existingProduct = _context.GetProduct(id);
@@ -82,9 +82,6 @@ namespace WebApplication2.Controllers
             if (product == null)
                 return NotFound($"Product with Id = {id} not found");
 
-            product.ImageName = imageFile.FileName;
-            _context.EditProduct(product);
-
             try
             {
                 if (imageFile.Length > 0)
@@ -99,6 +96,8 @@ namespace WebApplication2.Controllers
                     {
                         imageFile.CopyTo(filestream);
                         filestream.Flush();
+                        product.ImageName = imageFile.FileName;
+                        _context.EditProduct(product);
                         return "Uploaded";
                     }
                 }
